@@ -2,6 +2,11 @@
 name = "wiringx-sys"
 version = "2.0.0"
 edition = "2021"
+description = "low level bindings to the wiringX library"
+homepage = "https://wiringx.org"
+license = "MPL-2.0"
+keywords = ["GPIO"]
+readme = "README.md"
 
 [dependencies]
 
