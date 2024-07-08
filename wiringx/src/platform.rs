@@ -1,5 +1,7 @@
 use std::{ffi::CString, os::raw::c_char};
 
+use thiserror::Error;
+
 /// All supported platforms of WiringX
 #[derive(Clone, Copy, PartialEq, Debug)]
 pub enum Platform {
@@ -77,4 +79,48 @@ impl Platform {
 
         cstring.into_raw() as *mut c_char
     }
+
+    /// Parses a string to the platform type.
+    pub fn from_string(string: &str) -> Result<Self, PlatformParseError> {
+        let platform = match string.to_lowercase().as_str() {
+            "odroidc1" => Self::Odriodc1,
+            "odroidc2" => Self::Odriodc2,
+            "odroidxu4" => Self::Odriodxu4,
+            "bananapi1" => Self::BananaPi1,
+            "bananapim2" => Self::BananaPim2,
+            "pcduino1" => Self::Pcduino1,
+            "milkv_duo" => Self::MilkVDuo,
+            "milkv_duo256m" => Self::MilkVDuo256M,
+            "milkv_duos" => Self::MilkVDuoS,
+            "rock4" => Self::Rock4,
+            "rock5b" => Self::Rock5b,
+            "raspberrypi1b1" => Self::RaspberryPi1b1,
+            "raspberrypi1b2" => Self::RaspberryPi1b2,
+            "raspberrypi1b+" => Self::RaspberryPi1bPlus,
+            "raspberrypi1bplus" => Self::RaspberryPi1bPlus,
+            "raspberrypi2" => Self::RaspberryPi2,
+            "raspberrypi3" => Self::RaspberryPi3,
+            "raspberrypi4" => Self::RaspberryPi4,
+            "raspberrypizero" => Self::RaspberryPiZero,
+            "hummingboard_base_dq" => Self::HummingboardBasedq,
+            "hummingboard_pro_dq" => Self::HummingboardProdq,
+            "hummingboard_base_sdl" => Self::HummingboardBasesdl,
+            "hummingboard_pro_sdl" => Self::HummingboardProsdl,
+            "hummingboard_edge_dq" => Self::HummingboardEdgedq,
+            "hummingboard_gate_dq" => Self::HummingboardGatedq,
+            "hummingboard_edge_sdl" => Self::HummingboardEdgesdl,
+            "hummingboard_gate_sdl" => Self::HummingboardGatesdl,
+            "orangepipc2" => Self::OrangePiPC2,
+            "orangepipc+" => Self::OrangePiPCPlus,
+            "orangepipcplus" => Self::OrangePiPCPlus,
+            _ => return Err(PlatformParseError(string.to_string())),
+        };
+
+        Ok(platform)
+    }
 }
+
+/// Returns when the given platform string is invalid.
+#[derive(Debug, Error)]
+#[error("Can not determine a valid platform from {0}.")]
+pub struct PlatformParseError(String);
