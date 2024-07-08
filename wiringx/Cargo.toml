@@ -1,6 +1,6 @@
 [package]
 name = "wiringx"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "safe and Rusty bindings to the wiringX library"
 homepage = "https://wiringx.org"
