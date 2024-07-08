@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 description = "safe and Rusty bindings to the wiringX library"
 homepage = "https://wiringx.org"
+repository = "https://github.com/Letronix624/wiringx-rs"
 license = "MPL-2.0"
 keywords = ["GPIO", "Milk-V", "embedded"]
 readme = "README.md"
