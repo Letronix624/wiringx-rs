@@ -1,4 +1,4 @@
-//! I2C related objects.
+//! Inter-integrated circuit related objects.
 
 use std::{ffi::CString, os::fd::RawFd, path::PathBuf};
 
@@ -14,21 +14,21 @@ use crate::{Hand, WiringXError};
 #[derive(Debug)]
 pub struct I2C {
     id: (PathBuf, i32),
-    i2c_handles: Hand<(PathBuf, i32)>,
+    handles: Hand<(PathBuf, i32)>,
     fd: RawFd,
 }
 
 impl I2C {
     pub(super) fn new(
-        node: PathBuf,
+        dev: PathBuf,
         addr: i32,
         handles: Hand<(PathBuf, i32)>,
     ) -> Result<Self, WiringXError> {
-        if handles.lock().contains(&(node.clone(), addr)) {
+        if handles.lock().contains(&(dev.clone(), addr)) {
             return Err(WiringXError::PinUsed);
         }
 
-        let path_string = CString::new(node.to_str().ok_or(WiringXError::Other(
+        let path_string = CString::new(dev.to_str().ok_or(WiringXError::Other(
             "Path contains illegal symbols.".to_string(),
         ))?)
         .map_err(|e| WiringXError::Other(e.to_string()))?;
@@ -39,11 +39,11 @@ impl I2C {
             return Err(WiringXError::Unsupported);
         }
 
-        handles.lock().insert((node.clone(), addr));
+        handles.lock().insert((dev.clone(), addr));
 
         Ok(Self {
-            id: (node, addr),
-            i2c_handles: handles,
+            id: (dev, addr),
+            handles,
             fd: fd_result,
         })
     }
@@ -111,14 +111,17 @@ impl I2C {
 
 impl Drop for I2C {
     fn drop(&mut self) {
-        self.i2c_handles.lock().remove(&self.id);
+        self.handles.lock().remove(&self.id);
     }
 }
 
+/// Errors when reading or writing from the I2C device.
 #[derive(Error, Debug, Clone, Copy)]
 pub enum I2CError {
+    /// Gets returned if for some reason the read operation fails.
     #[error("Failed to read from I2C device.")]
     Read,
+    /// Gets returned if for some reason the write operation fails.
     #[error("Failed to write to I2C device.")]
     Write,
 }

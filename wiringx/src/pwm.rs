@@ -1,3 +1,5 @@
+//! Pulse width modulation related objects.
+
 use std::{io, time::Duration};
 
 use wiringx_sys::{

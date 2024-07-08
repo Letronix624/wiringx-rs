@@ -1,4 +1,4 @@
-//! GPIO related objects.
+//! General purpose input output related objects.
 
 use std::{collections::HashSet, sync::Arc, time::Duration};
 

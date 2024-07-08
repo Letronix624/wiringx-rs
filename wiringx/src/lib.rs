@@ -12,6 +12,7 @@ use i2c::I2C;
 use pwm::PwmPin;
 use spi::Spi;
 use thiserror::Error;
+use uart::{InvalidUARTConfig, SerialConfig, Uart};
 
 use std::{
     any::TypeId,
@@ -43,6 +44,7 @@ pub struct WiringX {
     pwm_handles: Hand<i32>,
     i2c_handles: Hand<(PathBuf, i32)>,
     spi_handles: Hand<i32>,
+    uart_handles: Hand<PathBuf>,
 }
 
 impl WiringX {
@@ -63,6 +65,7 @@ impl WiringX {
                 pwm_handles: Mutex::new(HashSet::new()).into(),
                 i2c_handles: Mutex::new(HashSet::new()).into(),
                 spi_handles: Mutex::new(HashSet::new()).into(),
+                uart_handles: Mutex::new(HashSet::new()).into(),
             }
         });
 
@@ -130,8 +133,8 @@ impl WiringX {
     }
 
     /// Sets up an I2C instance for the given I2C device path, for example `/dev/i2c-1`, and device address.
-    pub fn setup_i2c(&self, path: PathBuf, addr: i32) -> Result<I2C, WiringXError> {
-        I2C::new(path, addr, self.i2c_handles.clone())
+    pub fn setup_i2c(&self, dev: PathBuf, addr: i32) -> Result<I2C, WiringXError> {
+        I2C::new(dev, addr, self.i2c_handles.clone())
     }
 
     /// Sets up an SPI instance for the given device channel.
@@ -139,6 +142,10 @@ impl WiringX {
     /// Speed is measured in Hertz here.
     pub fn setup_spi(&self, channel: i32, speed: u32) -> Result<Spi, WiringXError> {
         Spi::new(channel, speed as i32, self.spi_handles.clone())
+    }
+
+    pub fn setup_uart(&self, dev: PathBuf, config: SerialConfig) -> Result<Uart, WiringXError> {
+        Uart::new(dev, config, self.uart_handles.clone())
     }
 }
 
@@ -172,6 +179,9 @@ pub enum WiringXError {
     /// Gets returned when a a function gets called that is not supported on the set platform.
     #[error("The function you are trying to call is not supported on your platform.")]
     Unsupported,
+    /// Gets returned if the provided config for UART is not valid.
+    #[error("The provided UART config is not valid: {0}")]
+    InvalidUARTConfig(InvalidUARTConfig),
     /// Io os error.
     #[error("IO error: {0}")]
     Io(io::Error),

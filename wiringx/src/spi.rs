@@ -1,3 +1,5 @@
+//! Serial peripheral interface communication related objects.
+
 use std::{ffi::c_uchar, os::fd::RawFd};
 
 use wiringx_sys::{wiringXSPIDataRW, wiringXSPIGetFd, wiringXSPISetup};

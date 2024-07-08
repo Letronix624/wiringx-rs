@@ -1,3 +1,5 @@
+//! All supported platforms of this library.
+
 use std::{ffi::CString, os::raw::c_char};
 
 use thiserror::Error;
