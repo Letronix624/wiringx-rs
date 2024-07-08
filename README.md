@@ -7,9 +7,6 @@ Please open an issue containing package manager specific install commands for th
 
 The right RISC-V GCC toolchain can be built [here](https://github.com/riscv-collab/riscv-gnu-toolchain).
 
-When building to a specific architecture and the library fails to build because it can not find the right toolchain, change the environment variable `CC`
-to the corresponding gcc compiler executable path.
-
 ## Milk-V
 
 To build and run your wiringX application on a Milk-V Duo Linux environment follow those steps:
@@ -17,7 +14,7 @@ To build and run your wiringX application on a Milk-V Duo Linux environment foll
 1. Boot the Duo and connect to it using ssh using ```ssh root@192.168.42.1``` with password `milkv`.
    You can also run the `ssh-copy-id root@192.168.42.1` command to export your ssh key to the Duo.
 
-2. Run ```ln -s /lib/ld-musl-riscv64v0p7_xthead.so.1 /lib/ld-musl-riscv64.so.1``` for the programs to work.
+2. On your Duo run ```ln -s /lib/ld-musl-riscv64v0p7_xthead.so.1 /lib/ld-musl-riscv64.so.1``` for the programs to work.
 
 3. Install the [riscv-gnu-toolchain](https://github.com/riscv-collab/riscv-gnu-toolchain), run the `configure` script with all default settings and no flags,
    then run ```sudo make musl```
