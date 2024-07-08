@@ -11,4 +11,4 @@ readme = "README.md"
 [dependencies]
 parking_lot = "0.12"
 thiserror = "1.0"
-wiringx-sys = {path = "../wiringx-sys"}
+wiringx-sys = { version = "2.0.0", path = "../wiringx-sys"}
