@@ -64,6 +64,7 @@ fn main() {
     build.flag("-Wl,-rpath=/usr/local/lib/");
     build.flag("-Wl,-rpath=/usr/lib/");
     build.flag("-Wl,-rpath=/lib/");
+    build.flag("-Wno-int-conversion");
 
     build.flag_if_supported("-w");
 
