@@ -1,10 +1,10 @@
 use std::env;
 use std::path::PathBuf;
 
-const WIRINGX: &str = "duo-wiringx-1.0.2";
+const WIRINGX: &str = "duo-wiringx-1.0.3";
 
 fn main() {
-    println!("cargo:rerun-if-changed=duo-wiringx-1.0.2");
+    println!("cargo:rerun-if-changed={}", WIRINGX);
 
     let include_dirs = [
         "",
